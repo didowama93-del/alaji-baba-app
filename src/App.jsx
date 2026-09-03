@@ -848,7 +848,6 @@ export default function App() {
   const roles = [
     { key: "buyer", label: "Acheteur", icon: User },
     { key: "seller", label: "Vendeur", icon: Store },
-    { key: "admin", label: "Administrateur", icon: ShieldCheck },
   ];
 
   if (!session) {
