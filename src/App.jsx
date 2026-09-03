@@ -771,7 +771,44 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
 
 /* ---------------------------- APP ---------------------------- */
 
+function PublicShopView({ sellers, products }) {
+  const path = window.location.pathname;
+  const slug = path.startsWith("/boutique/") ? path.replace("/boutique/", "") : null;
+  const seller = sellers.find((s) => slugify(s.name) === slug);
+  if (!seller) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Inter', sans-serif" }}>
+        Boutique introuvable.
+      </div>
+    );
+  }
+  const shopProducts = products.filter((p) => p.seller === seller.id);
+  return (
+    <div style={{ minHeight: "100vh", background: "#F5F6F8", padding: 20, fontFamily: "'Inter', -apple-system, sans-serif", color: NAVY }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+        <div style={{ width: 40, height: 40, borderRadius: 8, background: ORANGE, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 18 }}>{seller.name[0]}</div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 18 }}>{seller.name}</div>
+          <div style={{ fontSize: 12, color: "#9AA3B2" }}>{seller.status === "verified" ? "Boutique vérifiée" : "Boutique"}</div>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        {shopProducts.map((p) => (
+          <div key={p.id} style={{ background: "#fff", borderRadius: 10, padding: 12, border: "1px solid #E6E8EC" }}>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</div>
+            <div style={{ fontSize: 13, color: ORANGE, fontWeight: 700, marginTop: 4 }}>{p.price} F</div>
+          </div>
+        ))}
+        {shopProducts.length === 0 && <div style={{ fontSize: 13, color: "#9AA3B2" }}>Aucun produit pour le moment.</div>}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
+  if (window.location.pathname.startsWith("/boutique/")) {
+    return <PublicShopView sellers={initialSellers} products={initialProducts} />;
+  }
   const [session, setSession] = useState(null); // { role, sellerId }
   const [role, setRole] = useState("buyer");
   const [products, setProducts] = useState(initialProducts);
