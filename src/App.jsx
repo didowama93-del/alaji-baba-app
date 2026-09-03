@@ -661,9 +661,7 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
   const quickLogins = [
     { label: "Acheteur (démo)", icon: User, session: { role: "buyer", sellerId: null } },
     { label: "Vendeur — SODEM (vérifié)", icon: Store, session: { role: "seller", sellerId: "s1" } },
-    { label: "Vendeur — Faso AgriTech (en attente)", icon: Store, session: { role: "seller", sellerId: "s3" } },
-    { label: "Administrateur", icon: ShieldCheck, session: { role: "admin", sellerId: null } },
-  ];
+    { label: "Vendeur — Faso AgriTech (en attente)", icon: Store, session: { role: "seller", sellerId: "s3" } },  ];
 
   return (
     <div style={{ minHeight: "100vh", background: "#F5F6F8", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: "'Inter', -apple-system, sans-serif" }}>
