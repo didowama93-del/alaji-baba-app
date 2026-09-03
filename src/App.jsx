@@ -546,7 +546,14 @@ function AdminView({ sellers, setSellers, orders, setOrders, view, setView, paym
                   {s.status === "pending" && <Badge tone="warning">En attente</Badge>}
                   {s.status === "rejected" && <Badge tone="danger">Rejeté</Badge>}
                 </div>
-                <div style={{ fontSize: 12, color: "#9AA3B2" }}>Documents : {s.docs.join(", ")}</div>
+                <div style={{ fontSize: 12, color: "#9AA3B2", marginBottom: 6 }}>Documents :</div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+            {s.docs.map((d, i) => d.startsWith("data:image") ? (
+              <img key={i} src={d} alt="document" style={{ width: 90, height: 90, objectFit: "cover", borderRadius: 6, border: "1px solid #E6E8EC" }} />
+            ) : (
+              <span key={i} style={{ fontSize: 12, color: "#9AA3B2" }}>{d}</span>
+            ))}
+          </div>
               </div>
               {s.status === "pending" && (
                 <div style={{ display: "flex", gap: 8 }}>
@@ -732,11 +739,11 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
                   <input placeholder="Nom de la boutique" value={form.shopName} onChange={(e) => setForm({ ...form, shopName: e.target.value })} style={inputStyle} />
                   <label style={{ ...inputStyle, display: "flex", alignItems: "center", gap: 8, cursor: "pointer", color: form.idDoc ? NAVY : "#9AA3B2" }}>
                     <CreditCard size={14} />{form.idDoc || "Pièce d'identité (cliquer pour joindre)"}
-                    <input type="file" style={{ display: "none" }} onChange={(e) => setForm({ ...form, idDoc: e.target.files[0]?.name || "" })} />
+                    <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => setForm((f) => ({ ...f, idDoc: reader.result })); reader.readAsDataURL(file); }} />
                   </label>
                   <label style={{ ...inputStyle, display: "flex", alignItems: "center", gap: 8, cursor: "pointer", color: form.bizDoc ? NAVY : "#9AA3B2" }}>
                     <FileText size={14} />{form.bizDoc || "Document d'entreprise / RCCM (cliquer pour joindre)"}
-                    <input type="file" style={{ display: "none" }} onChange={(e) => setForm({ ...form, bizDoc: e.target.files[0]?.name || "" })} />
+                    <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => setForm((f) => ({ ...f, bizDoc: reader.result })); reader.readAsDataURL(file); }} />
                   </label>
                   <div style={{ fontSize: 11, color: "#9AA3B2" }}>Votre compte sera activé après validation de ces documents par l'administrateur.</div>
                 </>
