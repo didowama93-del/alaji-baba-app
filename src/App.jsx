@@ -658,6 +658,12 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
   const submitLogin = () => {
     if (loginEmail === "balalima94@gmail.com" && loginPassword === "93998244Man") {
       onLogin({ role: "admin", sellerId: null });
+      return;
+    }
+    const accounts = JSON.parse(localStorage.getItem("abb_accounts") || "[]");
+    const found = accounts.find((a) => a.email === loginEmail && a.password === loginPassword);
+    if (found) {
+      onLogin({ role: found.role, sellerId: found.sellerId });
     } else {
       setLoginError("Identifiants incorrects");
     }
@@ -665,13 +671,18 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
 
   const submitRegister = () => {
     if (!form.name || !form.email || !form.password) return;
+    const accounts = JSON.parse(localStorage.getItem("abb_accounts") || "[]");
     if (regType === "buyer") {
+      accounts.push({ name: form.name, email: form.email, password: form.password, role: "buyer", sellerId: null });
+      localStorage.setItem("abb_accounts", JSON.stringify(accounts));
       onLogin({ role: "buyer", sellerId: null });
     } else {
       if (!form.shopName || !form.idDoc || !form.bizDoc) return;
       const id = "s" + Date.now();
       const newSeller = { id, name: form.shopName, status: "pending", docs: [form.idDoc, form.bizDoc], joined: "à l'instant", payout: null };
       setSellers((ss) => [...ss, newSeller]);
+      accounts.push({ name: form.name, email: form.email, password: form.password, role: "seller", sellerId: id });
+      localStorage.setItem("abb_accounts", JSON.stringify(accounts));
       onLogin({ role: "seller", sellerId: id });
     }
   };
