@@ -47,8 +47,8 @@ const initialPaymentMethods = [
 
 const money = (n) => n.toLocaleString("fr-FR") + " F";
 const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-const shopLink = (seller) => `alajibaba.com/boutique/${slugify(seller.name)}`;
-const platformLink = "alajibaba.com";
+const shopLink = (seller) => `alaji-baba-app.vercel.app/boutique/${slugify(seller.name)}`;
+const platformLink = "alaji-baba-app.vercel.app";
 
 function CopyLink({ link, label }) {
   const [copied, setCopied] = useState(false);
