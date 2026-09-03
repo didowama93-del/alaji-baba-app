@@ -380,8 +380,8 @@ function SellerView({ sellers, setSellers, products, setProducts, orders, view, 
 
   const addProduct = () => {
     if (!form.name || !form.price) return;
-    setProducts((ps) => [...ps, { id: "p" + Date.now(), seller: me.id, sellerName: me.name, price: Number(form.price), unit: form.unit, moq: Number(form.moq) || 1, category: form.category || "Divers", specs: {}, img: "📦", name: form.name }]);
-    setForm({ name: "", price: "", unit: "unité", moq: 1, category: "" }); setNewProduct(false);
+    setProducts((ps) => [...ps, { id: "p" + Date.now(), seller: me.id, sellerName: me.name, price: Number(form.price), unit: form.unit, moq: Number(form.moq) || 1, category: form.category || "Divers", type: form.type || "physical", img: form.img || "📦", fileName: form.fileName || "", specs: {}, name: form.name }]);
+    setForm({ name: "", price: "", unit: "unité", moq: 1, category: "", type: "physical", img: "", fileName: "" }); setNewProduct(false);
   };
 
   return (
@@ -423,7 +423,31 @@ function SellerView({ sellers, setSellers, products, setProducts, orders, view, 
                   <input placeholder="Prix (F CFA)" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} style={{ flex: 1, padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit" }} />
                   <input placeholder="MOQ" type="number" value={form.moq} onChange={(e) => setForm({ ...form, moq: e.target.value })} style={{ width: 80, padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit" }} />
                 </div>
-                <input placeholder="Catégorie" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={{ padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit" }} />
+                <input placeholder="Catégorie" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={{ padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit", display: form.type === "digital" ? "none" : "block" }} />
+              {form.type === "digital" && (
+                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={{ padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit" }}>
+                  <option value="">Choisir une catégorie…</option>
+                  <option value="Ebook">Ebook</option>
+                  <option value="Document">Document</option>
+                  <option value="Logiciel / Application">Logiciel / Application</option>
+                  <option value="Musique">Musique</option>
+                  <option value="Vidéo / Formation">Vidéo / Formation</option>
+                  <option value="Modèle / Template">Modèle / Template</option>
+                  <option value="Autre">Autre</option>
+                </select>
+              )}
+              <div style={{ display: "flex", gap: 8 }}>
+                <button type="button" onClick={() => setForm({ ...form, type: "physical" })} style={{ flex: 1, padding: 8, borderRadius: 6, border: "1px solid #D7DCE4", background: (form.type || "physical") === "physical" ? "#1B2A4A" : "#fff", color: (form.type || "physical") === "physical" ? "#fff" : "#3B4457", fontWeight: 600 }}>Produit physique</button>
+                <button type="button" onClick={() => setForm({ ...form, type: "digital" })} style={{ flex: 1, padding: 8, borderRadius: 6, border: "1px solid #D7DCE4", background: form.type === "digital" ? "#1B2A4A" : "#fff", color: form.type === "digital" ? "#fff" : "#3B4457", fontWeight: 600 }}>Produit numérique</button>
+              </div>
+              {form.type === "digital" ? (
+                <input type="file" onChange={(e) => { const f = e.target.files[0]; if (f) setForm({ ...form, fileName: f.name }); }} style={{ padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit" }} />
+              ) : (
+                <div>
+                  <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files[0]; if (f) { const reader = new FileReader(); reader.onload = () => setForm({ ...form, img: reader.result }); reader.readAsDataURL(f); } }} style={{ padding: 9, borderRadius: 6, border: "1px solid #D7DCE4", fontFamily: "inherit" }} />
+                  {form.img && <img src={form.img} alt="aperçu" style={{ width: 70, height: 70, objectFit: "cover", borderRadius: 6, marginTop: 6 }} />}
+                </div>
+              )}
                 <Button onClick={addProduct}>Publier le produit</Button>
               </div>
             </Card>
