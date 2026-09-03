@@ -46,6 +46,7 @@ const initialPaymentMethods = [
 ];
 
 const money = (n) => n.toLocaleString("fr-FR") + " F";
+const isImg = (s) => typeof s === "string" && (s.startsWith("data:image") || s.startsWith("http"));
 const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const shopLink = (seller) => `alaji-baba-app.vercel.app/boutique/${slugify(seller.name)}`;
 const platformLink = "alaji-baba-app.vercel.app";
@@ -207,7 +208,7 @@ function BuyerView({ products, sellers, orders, setOrders, messages, setMessages
               const seller = sellers.find((s) => s.id === p.seller);
               return (
                 <Card key={p.id} style={{ padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-                  <div style={{ fontSize: 34, textAlign: "center", background: "#F7F8FA", borderRadius: 8, padding: "14px 0" }}>{p.img}</div>
+                  <div style={{ height: 140, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, background: "#F7F8FA", borderRadius: 8, overflow: "hidden" }}>{isImg(p.img) ? <img src={p.img} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:8}} /> : p.img}</div>
                   <div style={{ fontSize: 11, color: "#9AA3B2", fontWeight: 600 }}>{p.category}</div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: NAVY, lineHeight: 1.3 }}>{p.name}</div>
                   <div style={{ fontSize: 17, fontWeight: 800, color: ORANGE }}>{money(p.price)} <span style={{ fontSize: 11, fontWeight: 500, color: "#9AA3B2" }}>/ {p.unit} · MOQ {p.moq}</span></div>
@@ -342,7 +343,7 @@ function BuyerView({ products, sellers, orders, setOrders, messages, setMessages
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {products.filter((p) => p.seller === shopSeller.id).map((p) => (
                 <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "#F7F8FA", borderRadius: 7 }}>
-                  <div style={{ fontSize: 20 }}>{p.img}</div>
+                  <div style={{ fontSize: 20 }}>{isImg(p.img) ? <img src={p.img} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:8}} /> : p.img}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 12.5, fontWeight: 600, color: NAVY }}>{p.name}</div>
                     <div style={{ fontSize: 12.5, fontWeight: 700, color: ORANGE }}>{money(p.price)}</div>
@@ -455,7 +456,7 @@ function SellerView({ sellers, setSellers, products, setProducts, orders, view, 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px,1fr))", gap: 12 }}>
             {myProducts.map((p) => (
               <Card key={p.id} style={{ padding: 12 }}>
-                <div style={{ fontSize: 26 }}>{p.img}</div>
+                <div style={{ fontSize: 26 }}>{isImg(p.img) ? <img src={p.img} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:8}} /> : p.img}</div>
                 <div style={{ fontWeight: 700, fontSize: 13, color: NAVY, margin: "6px 0 2px" }}>{p.name}</div>
                 <div style={{ color: ORANGE, fontWeight: 700, fontSize: 14 }}>{money(p.price)}</div>
               </Card>
