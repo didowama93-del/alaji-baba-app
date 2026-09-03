@@ -643,7 +643,18 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
   const [tab, setTab] = useState("login");
   const [regType, setRegType] = useState("buyer");
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", shopName: "", idDoc: "", bizDoc: "" });
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
   const inputStyle = { width: "100%", padding: 10, borderRadius: 7, border: "1px solid #D7DCE4", fontFamily: "inherit", fontSize: 13.5, boxSizing: "border-box" };
+
+  const submitLogin = () => {
+    if (loginEmail === "balalima94@gmail.com" && loginPassword === "93998244Man") {
+      onLogin({ role: "admin", sellerId: null });
+    } else {
+      setLoginError("Identifiants incorrects");
+    }
+  };
 
   const submitRegister = () => {
     if (!form.name || !form.email || !form.password) return;
@@ -682,14 +693,16 @@ function AuthScreen({ sellers, setSellers, onLogin }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
               <div style={{ position: "relative" }}>
                 <Mail size={14} style={{ position: "absolute", left: 10, top: 12, color: "#9AA3B2" }} />
-                <input placeholder="Adresse e-mail" style={{ ...inputStyle, paddingLeft: 32 }} />
+                <input placeholder="Adresse e-mail" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ ...inputStyle, paddingLeft: 32 }} />
               </div>
               <div style={{ position: "relative" }}>
                 <Lock size={14} style={{ position: "absolute", left: 10, top: 12, color: "#9AA3B2" }} />
-                <input type="password" placeholder="Mot de passe" style={{ ...inputStyle, paddingLeft: 32 }} />
+                <input type="password" placeholder="Mot de passe" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ ...inputStyle, paddingLeft: 32 }} />
               </div>
             </div>
-            <div style={{ fontSize: 11, color: "#9AA3B2", marginBottom: 8 }}>Prototype de démonstration — utilisez un accès rapide ci-dessous :</div>
+            <button onClick={submitLogin} style={{ width: "100%", padding: 10, borderRadius: 7, border: "none", background: "#1a2b4c", color: "#fff", fontWeight: 700, fontSize: 13.5, cursor: "pointer", marginBottom: 10 }}>Se connecter</button>
+          {loginError && <div style={{ color: "red", fontSize: 12, marginBottom: 8 }}>{loginError}</div>}
+          <div style={{ fontSize: 11, color: "#9AA3B2", marginBottom: 8 }}>Prototype de démonstration — utilisez un accès rapide ci-dessous :</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {quickLogins.map((q) => (
                 <button key={q.label} onClick={() => onLogin(q.session)} style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", borderRadius: 7, border: "1px solid #E6E8EC", background: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600, color: NAVY, fontFamily: "inherit" }}>
