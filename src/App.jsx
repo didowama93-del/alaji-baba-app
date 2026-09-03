@@ -848,6 +848,7 @@ export default function App() {
   const roles = [
     { key: "buyer", label: "Acheteur", icon: User },
     { key: "seller", label: "Vendeur", icon: Store },
+    { key: "admin", label: "Administrateur", icon: ShieldCheck },
   ];
 
   if (!session) {
@@ -875,7 +876,7 @@ export default function App() {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.18)", padding: 4, borderRadius: 9 }}>
-            {roles.map((r) => (
+            {roles.filter((r) => r.key !== "admin").map((r) => (
               <button key={r.key} onClick={() => setRole(r.key)} style={{
                 display: "flex", alignItems: "center", gap: 6, padding: "7px 13px", borderRadius: 7, border: "none", cursor: "pointer",
                 background: role === r.key ? "#fff" : "transparent", color: role === r.key ? ORANGE_DARK : "#fff", fontSize: 13, fontWeight: 700, fontFamily: "inherit",
